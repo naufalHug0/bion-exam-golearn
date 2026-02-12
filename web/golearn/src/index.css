@@ -17,7 +17,6 @@ body {
   @apply bg-cream text-dark font-sans antialiased;
 }
 
-/* Custom Scrollbar for Game Feel */
 ::-webkit-scrollbar {
   width: 10px;
 }

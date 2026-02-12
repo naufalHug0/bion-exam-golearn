@@ -41,7 +41,6 @@ export const XPBar = ({ progress, label, color = 'bg-green-500' }) => (
             animate={{ width: `${progress}%` }}
             className={`h-full ${color}`}
         />
-        {/* Efek kilau */}
         <div className="absolute top-0 left-0 w-full h-1 bg-white opacity-20"></div>
         </div>
     </div>

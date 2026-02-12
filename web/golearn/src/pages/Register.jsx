@@ -17,7 +17,7 @@ export default function Register() {
         setLoading(true);
         try {
         const res = await API.post('/auth/register', form);
-        // Langsung login setelah register berhasil
+        
         login(res.data.data);
         toast.success('Registrasi berhasil! Selamat datang di GoLearn.');
         navigate('/');
@@ -30,7 +30,7 @@ export default function Register() {
 
     return (
         <div className="min-h-screen bg-primary flex items-center justify-center p-4 relative overflow-hidden">
-        {/* Decoration Circles */}
+        
         <div className="absolute top-10 right-10 w-32 h-32 bg-secondary rounded-full opacity-50 blur-xl"></div>
         <div className="absolute bottom-10 left-10 w-48 h-48 bg-sand rounded-full opacity-50 blur-xl"></div>
 

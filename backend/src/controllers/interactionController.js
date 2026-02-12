@@ -2,40 +2,39 @@ import User from '../models/User.js';
 import UserProgress from '../models/UserProgress.js';
 import Bookmark from '../models/Bookmark.js';
 import Comment from '../models/Comment.js';
-import Material from '../models/Material.js';
 import { successResponse, errorResponse } from '../utils/response.js';
 
-// Konfigurasi Point Gamifikasi
+
 const XP_POINTS = {
     MATERIAL_COMPLETED: 10,
     COMMENT_POSTED: 5
 };
 
-// Mark Material as Complete (Gamification Trigger)
+
 export const markComplete = async (req, res) => {
     try {
         const { materialId } = req.body;
         const userId = req.user._id;
         
-        // 1. Cek apakah progress sudah ada
+        
         const existingProgress = await UserProgress.findOne({ userId, materialId });
 
         if (existingProgress && existingProgress.isCompleted) {
-            // Jika sudah selesai sebelumnya, jangan tambah XP lagi
+            
             return successResponse(res, 200, 'Material already completed', { xpGained: 0 });
         }
 
-        // 2. Jika belum ada atau belum complete, update progress
+        
         await UserProgress.findOneAndUpdate(
             { userId, materialId },
             { isCompleted: true },
             { upsert: true, new: true }
         );
 
-        // 3. Tambah XP ke User (+10 XP)
+        
         const updatedUser = await User.findByIdAndUpdate(
             userId,
-            { $inc: { xp: XP_POINTS.MATERIAL_COMPLETED } }, // Increment XP
+            { $inc: { xp: XP_POINTS.MATERIAL_COMPLETED } }, 
             { new: true }
         );
 
@@ -49,7 +48,7 @@ export const markComplete = async (req, res) => {
     }
 };
 
-// Toggle Bookmark
+
 export const toggleBookmark = async (req, res) => {
     try {
         const { materialId } = req.body;
@@ -67,7 +66,7 @@ export const toggleBookmark = async (req, res) => {
     }
 };
 
-// Get My Bookmarks
+
 export const getMyBookmarks = async (req, res) => {
     try {
         const bookmarks = await Bookmark.find({ userId: req.user._id })
@@ -92,12 +91,12 @@ export const getMyBookmarks = async (req, res) => {
     }
 };
 
-// Forum/Comment Methods
+
 export const postComment = async (req, res) => {
     try {
         const { chapterId, content } = req.body;
         
-        // Buat Komentar
+        
         const comment = await Comment.create({
             userId: req.user._id,
             chapterId,
@@ -106,7 +105,7 @@ export const postComment = async (req, res) => {
         
         await comment.populate('userId', 'name avatar');
 
-        // Gamification: Tambah XP saat berkomentar (+5 XP)
+        
         await User.findByIdAndUpdate(
             req.user._id, 
             { $inc: { xp: XP_POINTS.COMMENT_POSTED } }
@@ -122,10 +121,23 @@ export const getComments = async (req, res) => {
     try {
         const { chapterId } = req.params;
         const comments = await Comment.find({ chapterId })
-            .populate('userId', 'name avatar xp') // Tampilkan juga XP user lain di forum (biar keren)
+            .populate('userId', 'name avatar xp') 
             .sort({ createdAt: -1 });
 
         successResponse(res, 200, 'Comments retrieved', comments);
+    } catch (error) {
+        errorResponse(res, 500, error.message);
+    }
+};
+
+export const getLeaderboard = async (req, res) => {
+    try {
+        const leaderboard = await User.find()
+            .select('name avatar xp')
+            .sort({ xp: -1 })        
+            .limit(5);               
+
+        successResponse(res, 200, 'Leaderboard retrieved successfully', leaderboard);
     } catch (error) {
         errorResponse(res, 500, error.message);
     }

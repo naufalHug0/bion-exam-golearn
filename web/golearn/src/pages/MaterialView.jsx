@@ -9,8 +9,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import clsx from 'clsx';
 
 export default function MaterialView() {
-    const { id } = useParams(); // Material ID
-    const { state } = useLocation(); // Context from SubjectDetail or Profile Bookmark
+    const { id } = useParams(); 
+    const { state } = useLocation(); 
     const navigate = useNavigate();
     const { updateUser } = useAuthStore();
     
@@ -19,14 +19,14 @@ export default function MaterialView() {
     const [isBookmarked, setIsBookmarked] = useState(false);
     const [completed, setCompleted] = useState(false);
 
-    // Ambil data material dari state (yang dilempar via Link react-router-dom)
+    
     const activeMaterial = state?.materialData;
     const chapterId = state?.chapterId;
 
     useEffect(() => {
         if (!activeMaterial) return;
         
-        // Set initial completion status dari data awal
+        
         if (activeMaterial.isCompleted) {
             setCompleted(true);
         }
@@ -57,19 +57,19 @@ export default function MaterialView() {
     };
 
     const handleComplete = async () => {
-        if (completed) return; // Mencegah spam klik
+        if (completed) return; 
 
         try {
             const res = await API.post('/interactions/progress', { materialId: id });
             setCompleted(true);
             
-            // Cek jika mendapat XP baru
+            
             if(res.data.data?.xpGained > 0) {
                 toast.success(`LEVEL UP! +${res.data.data.xpGained} XP`, {
                     icon: "🏆",
                     style: { background: "#BF4646", color: "#fff", fontWeight: "bold", border: "2px solid #2D2424", borderRadius: "12px" }
                 });
-                // Update global state user XP
+                
                 updateUser({ xp: res.data.data.currentXp });
             } else {
                 toast.info("Materi selesai di-review ulang.");
@@ -100,21 +100,21 @@ export default function MaterialView() {
         try {
             await API.post('/interactions/comment', { chapterId, content: newComment });
             setNewComment('');
-            fetchComments(chapterId); // Refresh list
+            fetchComments(chapterId); 
             toast.success("+5 XP Discussion!", { 
                 icon: "💬",
                 style: { background: "#7EACB5", color: "#fff", fontWeight: "bold" }
             });
             
-            // Asumsi backend menambah +5 XP, update lokal sementara (agar user merasa instant)
-            // Di production, sebaiknya backend return update XP saat post comment
+            
+            
             updateUser({ xp: (useAuthStore.getState().user.xp || 0) + 5 });
         } catch (err) {
             toast.error("Gagal mengirim pesan.");
         }
     };
 
-    // Keamanan: Jika diakses langsung via URL tanpa context, minta user kembali
+    
     if (!activeMaterial) {
         return (
             <div className="p-10 text-center bg-white rounded-3xl border-4 border-dark shadow-game max-w-lg mx-auto mt-20">
@@ -129,13 +129,11 @@ export default function MaterialView() {
         <div className="grid grid-cols-1 lg:grid-cols-1 gap-6 mt-20">
         <ToastContainer position="top-center" autoClose={3000} hideProgressBar={false} />
         
-        {/* Kolom Kiri: Content Viewer (2/3 width) */}
         <div className="lg:col-span-2 space-y-4">
             <button onClick={() => navigate(-1)} className="flex items-center gap-2 px-4 py-2 bg-white rounded-xl border-2 border-sand shadow-sm font-black text-dark hover:bg-sand transition">
                 <ArrowLeft size={20}/> Kembali
             </button>
             
-            {/* MEDIA VIEWER */}
             <div className="bg-dark rounded-3xl overflow-hidden shadow-game border-4 border-dark w-full aspect-video relative flex items-center justify-center group">
                 {activeMaterial.type === 'video' ? (
                     <video 
@@ -143,7 +141,7 @@ export default function MaterialView() {
                         controls 
                         controlsList="nodownload" 
                         className="w-full h-full object-contain bg-black"
-                        onEnded={handleComplete} // Auto trigger complete saat video tamat
+                        onEnded={handleComplete} 
                     />
                 ) : activeMaterial.type === 'pdf' ? (
                     <iframe 
@@ -152,7 +150,7 @@ export default function MaterialView() {
                         title="PDF Viewer"
                     />
                 ) : (
-                    // PPT Fallback Viewer
+                    
                     <div className="text-center text-white p-10 flex flex-col items-center justify-center w-full h-full bg-gradient-to-br from-secondary to-blue-900">
                         <div className="bg-white/20 p-6 rounded-3xl backdrop-blur-sm border-2 border-white/30 mb-6">
                             <BookOpen size={64} className="text-white drop-shadow-md" />
@@ -168,7 +166,6 @@ export default function MaterialView() {
                 )}
             </div>
 
-            {/* BOTTOM ACTION BAR */}
             <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 bg-white p-6 rounded-3xl border-4 border-sand shadow-game">
                 <div className='lg:max-w-[50%]'>
                     <h1 className="text-2xl md:text-3xl font-black text-dark leading-tight">{activeMaterial.title}</h1>
@@ -214,7 +211,6 @@ export default function MaterialView() {
             </div>
         </div>
 
-        {/* Kolom Kanan: Diskusi (1/3 width) */}
         <div className="h-full">
             <GameCard className="h-[600px] lg:h-full flex flex-col border-4 border-sand">
                 <div className="flex items-center gap-3 pb-4 border-b-4 border-sand mb-4">
@@ -236,7 +232,6 @@ export default function MaterialView() {
                     )}
                     {comments.map((c) => (
                         <div key={c._id} className="bg-cream p-4 rounded-2xl border-2 border-sand relative">
-                            {/* Bubble tail effect */}
                             <div className="absolute top-4 -left-2 w-4 h-4 bg-cream border-l-2 border-b-2 border-sand rotate-45"></div>
                             
                             <div className="flex items-center gap-2 mb-2">

@@ -15,7 +15,7 @@ export default function Profile() {
 
     return (
         <div className="max-w-4xl mx-auto space-y-8 mt-20">
-        {/* Profile Card */}
+        
         <div className="bg-primary rounded-3xl p-8 text-white shadow-game border-4 border-dark flex flex-col md:flex-row items-center gap-8 relative overflow-hidden">
             <div className="absolute top-0 right-0 w-64 h-64 bg-white opacity-10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
             
@@ -36,7 +36,7 @@ export default function Profile() {
             </div>
         </div>
 
-        {/* Bookmarks */}
+        
         <div>
             <h3 className="text-2xl font-black text-dark mb-4 flex items-center gap-2">
                 <BookMarked /> My Inventory (Bookmarks)

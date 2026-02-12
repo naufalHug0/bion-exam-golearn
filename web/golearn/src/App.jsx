@@ -8,6 +8,7 @@ import MaterialView from './pages/MaterialView';
 import Profile from './pages/Profile';
 import Register from './pages/Register';
 import { Toaster } from 'react-hot-toast';
+import Leaderboard from './pages/Leaderboard';
 
 const ProtectedRoute = ({ children }) => {
     const { token } = useAuthStore();
@@ -27,6 +28,7 @@ function App() {
             <Route index element={<Home />} />
             <Route path="subject/:id" element={<SubjectDetail />} />
             <Route path="material/:id" element={<MaterialView />} />
+            <Route path="leaderboard" element={<Leaderboard />} />
             <Route path="profile" element={<Profile />} />
             </Route>
         </Routes>

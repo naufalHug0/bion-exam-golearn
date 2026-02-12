@@ -25,7 +25,6 @@ export default function Login() {
 
     return (
         <div className="min-h-screen bg-primary flex items-center justify-center p-4 relative overflow-hidden">
-        {/* Decoration Circles */}
         <div className="absolute top-10 left-10 w-32 h-32 bg-secondary rounded-full opacity-50 blur-xl"></div>
         <div className="absolute bottom-10 right-10 w-48 h-48 bg-sand rounded-full opacity-50 blur-xl"></div>
 

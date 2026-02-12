@@ -1,5 +1,5 @@
 import express from 'express';
-import { markComplete, toggleBookmark, getMyBookmarks, postComment, getComments } from '../controllers/interactionController.js';
+import { markComplete, toggleBookmark, getMyBookmarks, postComment, getComments, getLeaderboard } from '../controllers/interactionController.js';
 import { protect } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
@@ -10,5 +10,7 @@ router.get('/bookmark', protect, getMyBookmarks);
 
 router.post('/comment', protect, postComment);
 router.get('/comment/:chapterId', protect, getComments);
+
+router.get('/leaderboard', protect, getLeaderboard);
 
 export default router;

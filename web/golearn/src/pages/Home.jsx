@@ -25,7 +25,6 @@ export default function Home() {
 
     return (
         <div>
-        {/* Header Controls */}
         <div className="mb-8">
             <h1 className="text-4xl font-black text-primary mb-2">Adventure Map</h1>
             <p className="font-bold text-gray-400">Pilih quest pelajaranmu hari ini!</p>
@@ -48,7 +47,6 @@ export default function Home() {
             </div>
         </div>
 
-        {/* Grid Subjects */}
         <div className={view === 'grid' ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" : "space-y-4"}>
             {subjects.map((sub) => (
             <GameCard key={sub._id} className="hover:-translate-y-2 transition-transform duration-300">
